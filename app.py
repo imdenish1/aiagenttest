@@ -21,28 +21,28 @@ def extract_text_from_pdf(file):
         for page in pdf_reader.pages:
             text += page.extract_text()
         return text
-    except:
-        return "Error reading PDF file."
+    except Exception as e:
+        return f"Error reading PDF file: {str(e)}"
 
 def extract_text_from_docx(file):
     try:
         doc = Document(file)
         return "
 ".join([paragraph.text for paragraph in doc.paragraphs])
-    except:
-        return "Error reading Word document."
+    except Exception as e:
+        return f"Error reading Word document: {str(e)}"
 
 def extract_text_from_excel(file):
     try:
-        workbook = openpyxl.load_workbook(file)
+        workbook = openpyxl.load_workbook(file, data_only=True)
         text = ""
         for sheet in workbook.sheetnames:
             worksheet = workbook[sheet]
             for row in worksheet.iter_rows(values_only=True):
                 text += " ".join([str(cell) if cell else "" for cell in row]) + "\n"
         return text
-    except:
-        return "Error reading Excel file."
+    except Exception as e:
+        return f"Error reading Excel file: {str(e)}"
 
 def process_file(uploaded_file):
     if uploaded_file.type == "application/pdf":
